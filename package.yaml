@@ -46,3 +46,7 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - prophecy
+    - hspec
+    - hspec-contrib
+    - QuickCheck
+    - HUnit
