@@ -1,0 +1,20 @@
+[
+    {
+        "cardName": "Mason of Death",
+        "cardFlavorText": "Even the lowly bricklayer must pay the tithe",
+        "cardModifiers": [],
+        "cardConditions": []
+    },
+    {
+        "cardName": "Knight of Night",
+        "cardFlavorText": "In the darkest of places, the light still shines",
+        "cardModifiers": [],
+        "cardConditions": []
+    },
+    {
+        "cardName": "Ring of Avarice",
+        "cardFlavorText": "Once a thing of beauty",
+        "cardModifiers": [],
+        "cardConditions": []
+    }
+]
