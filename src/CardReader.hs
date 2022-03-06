@@ -1,9 +1,9 @@
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE OverloadedStrings #-}
 
-module Lib
+module CardReader
   ( Card (Card),
-    CardModifierType,
+    CardModifierType (..),
+    CardModifierValue (..),
     cardName,
     cardFlavorText,
     cardModifiers,
@@ -20,9 +20,14 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy as BS
 import GHC.Generics
 
-data CardModifierType = Murder | Valor deriving (Enum)
+data CardModifierType = Murder | Valor deriving (Enum, Show, Eq, Generic)
 
-data CardModifierValue = CardModifierType Int deriving (Show, Generic)
+instance Data.Aeson.ToJSON CardModifierType where
+  toEncoding = Data.Aeson.genericToEncoding Data.Aeson.defaultOptions
+
+instance Data.Aeson.FromJSON CardModifierType
+
+newtype CardModifierValue = ModifierValue (CardModifierType, Int) deriving (Show, Generic, Eq)
 
 instance Data.Aeson.ToJSON CardModifierValue where
   toEncoding = Data.Aeson.genericToEncoding Data.Aeson.defaultOptions
@@ -53,7 +58,7 @@ instance Data.Aeson.ToJSON Deck
 instance Data.Aeson.FromJSON Deck
 
 getJSON :: FilePath -> IO BS.ByteString
-getJSON filePath = BS.readFile filePath
+getJSON = BS.readFile
 
 loadDeck :: FilePath -> IO (Either String Deck)
 loadDeck filePath = (eitherDecode <$> getJSON filePath) :: IO (Either String Deck)

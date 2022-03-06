@@ -1,6 +1,11 @@
 module Main where
 
-import Lib
+import CardReader
 
 main :: IO ()
-main = putStrLn $ show 5
+main = gameEngine
+
+gameEngine = do
+  putStrLn "Game loop"
+  player1Input <- getLine
+  gameEngine

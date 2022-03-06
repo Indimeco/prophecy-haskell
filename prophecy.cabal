@@ -25,7 +25,8 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      BoardState
+      CardReader
   other-modules:
       Paths_prophecy
   hs-source-dirs:
@@ -54,6 +55,8 @@ test-suite prophecy-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      BoardStateSpec
+      CardReaderSpec
       Paths_prophecy
   hs-source-dirs:
       test
@@ -66,5 +69,6 @@ test-suite prophecy-test
     , bytestring
     , hspec
     , hspec-contrib
+    , hspec-discover
     , prophecy
   default-language: Haskell2010
