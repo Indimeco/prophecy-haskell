@@ -20,14 +20,18 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy as BS
 import GHC.Generics
 
-data CardModifierType = Murder | Valor deriving (Enum, Show, Eq, Generic)
+data CardModifierType = Murder | Valor deriving (Enum, Show, Eq, Generic, Ord)
 
 instance Data.Aeson.ToJSON CardModifierType where
   toEncoding = Data.Aeson.genericToEncoding Data.Aeson.defaultOptions
 
 instance Data.Aeson.FromJSON CardModifierType
 
-newtype CardModifierValue = ModifierValue (CardModifierType, Int) deriving (Show, Generic, Eq)
+data CardModifierValue = CardModifierValue
+  { modifierType :: CardModifierType,
+    modifierValue :: Int
+  }
+  deriving (Show, Generic, Eq)
 
 instance Data.Aeson.ToJSON CardModifierValue where
   toEncoding = Data.Aeson.genericToEncoding Data.Aeson.defaultOptions

@@ -5,22 +5,17 @@ module BoardState
 where
 
 import CardReader
+import Data.List (groupBy, sort, sortBy)
 
 getBoardModifiers :: [CardReader.Card] -> [Maybe CardReader.CardModifierValue]
 getBoardModifiers [] = []
-
--- TODO fix totalCardModifiers, then this can be fixed too
--- getBoardModifiers xs = [totalCardModifiers . filtered . totalCardModifiers $ mods]
---   where
---     mods = map CardReader.cardModifiers xs
---     reduced = foldl (\z (_, v) -> z + v)
---     filtered :: [CardReader.CardModifierValue] -> [CardReader.CardModifierValue]
---     filtered = filter (\x -> False)
+getBoardModifiers xs = map totalCardModifiers $ groupMods mods
+  where
+    mods = xs >>= CardReader.cardModifiers
+    groupMods = groupBy (\a b -> CardReader.modifierType a == CardReader.modifierType b) . sortBy (\a b -> if CardReader.modifierType a == CardReader.modifierType b then LT else GT)
 
 totalCardModifiers :: [CardReader.CardModifierValue] -> Maybe CardReader.CardModifierValue
 totalCardModifiers [] = Nothing
--- Haskell cannot seem to infer that this is still a CardModifierValue
-totalCardModifiers ((modifierType, modifierVal) : xs) = Just (CardReader.ModifierValue (modifierType, modifierSum))
+totalCardModifiers (CardReader.CardModifierValue {modifierType = t, modifierValue = v} : xs) = Just (CardReader.CardModifierValue {modifierType = t, modifierValue = modifierSum})
   where
-    -- Haskell does not want to infer that CardModifierValue is assignable to (Any, Int)
-    modifierSum = foldl (\accumulator (something, val) -> val + accumulator) modifierVal xs
+    modifierSum = foldl (\accumulator CardReader.CardModifierValue {modifierValue = val} -> val + accumulator) v xs
